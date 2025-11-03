@@ -4,25 +4,30 @@ export interface Movie {
   poster_path: string | null;
   vote_average: number;
   release_date: string;
+  overview?: string;
 }
 
-interface TMDBResponse {
+interface TMDBSearchResponse {
+  page: number;
   results: Movie[];
+  total_pages: number;
+  total_results: number;
 }
 
-export async function searchMovies(query: string): Promise<Movie[]> {
+export async function searchMovies(query: string, page = 1): Promise<TMDBSearchResponse> {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
   const endpoint = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(
     query
-  )}`;
+  )}&page=${page}&include_adult=false&language=en-US`;
 
   const res = await fetch(endpoint);
-  if (!res.ok) throw new Error("Failed to fetch movies");
-
-  const data: TMDBResponse = await res.json();
-
-  return data.results;
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`TMDB search error: ${text}`);
+  }
+  const data = await res.json();
+  return data as TMDBSearchResponse;
 }
 
 export async function getMovieDetail(id: string) {

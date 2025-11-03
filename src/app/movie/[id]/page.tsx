@@ -26,7 +26,7 @@ export default async function MovieDetail(props: { params: Promise<{ id: string 
       />
 
       {/* Gradient overlay biar teks jelas */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-black/70 to-black -z-10" />
+      <div className="absolute inset-0 bg-linear-to-b from-black via-black/70 to-black -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 md:px-10 mt-6">
 
