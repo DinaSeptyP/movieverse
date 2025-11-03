@@ -1,6 +1,7 @@
 import Image from "next/image";
-import { getMovieDetail, getMovieCredits, getMovieVideos } from "@/app/lib/tmdb";
+import { getMovieDetail, getMovieCredits, getMovieVideos, getRecommendedMovies, getSimilarMovies } from "@/app/lib/tmdb";
 import BackButton from "@/app/components/BackButton";
+import MovieCard from "@/app/components/MovieCard";
 
 export default async function MovieDetail(props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;
@@ -14,10 +15,15 @@ export default async function MovieDetail(props: { params: Promise<{ id: string 
     (v: any) => v.type === "Trailer" && v.site === "YouTube"
   );
 
+  const recommended = await getRecommendedMovies(id);
+const similar = await getSimilarMovies(id);
+
+
   return (
     <div className="relative min-h-screen pb-12">
 
       {/* Background Blur */}
+      
       <Image
         src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
         alt="bg"
@@ -35,13 +41,19 @@ export default async function MovieDetail(props: { params: Promise<{ id: string 
         <div className="grid md:grid-cols-3 gap-10 mt-8">
 
           {/* Poster */}
-          <div className="relative w-full h-[480px] rounded-xl overflow-hidden shadow-2xl">
-            <Image
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
-              fill
-              className="object-cover"
-            />
+          <div className="relative w-full h-[620px] rounded-xl overflow-hidden shadow-2xl">
+            {movie.poster_path ? (
+              <Image
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-800 flex items-center justify-center text-gray-400 text-sm font-semibold">
+                No Poster Available
+              </div>
+            )}
           </div>
 
           {/* Content */}
@@ -66,7 +78,7 @@ export default async function MovieDetail(props: { params: Promise<{ id: string 
             </div>
 
             <p className="text-gray-300 pt-2">
-              🗓 <span className="font-medium">{movie.release_date}</span>
+              📅 <span className="font-medium">{movie.release_date}</span>
             </p>
 
             {movie.homepage && (
@@ -118,6 +130,34 @@ export default async function MovieDetail(props: { params: Promise<{ id: string 
             </div>
           </div>
         )}
+
+        {/* Recommended */}
+{recommended.results?.length > 0 && (
+  <div className="mt-12">
+    <h2 className="text-2xl font-semibold text-white">Recommended</h2>
+    <div className="flex gap-1 overflow-x-auto snap-x snap-mandatory p-8 px-5 no-scrollbar">
+  {recommended.results.slice(0, 15).map((movie: any) => (
+    <div key={movie.id} className="w-48 shrink-0 snap-start pl-3">
+      <MovieCard movie={movie} />
+    </div>
+  ))}
+</div>
+  </div>
+)}
+
+{/* Similar Movies */}
+{similar.results?.length > 0 && (
+  <div className="mt-12">
+    <h2 className="text-2xl font-semibold text-white">More Like This</h2>
+    <div className="flex gap-1 overflow-x-auto snap-x snap-mandatory p-8 px-5 no-scrollbar">
+      {similar.results.slice(0, 15).map((movie: any) => (
+        <div key={movie.id} className="w-48 shrink-0 snap-start pl-3">
+        <MovieCard key={movie.id} movie={movie} />
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
       </div>
     </div>

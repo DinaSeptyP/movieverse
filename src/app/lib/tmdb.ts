@@ -3,6 +3,7 @@ export interface Movie {
   title: string;
   poster_path: string | null;
   vote_average: number;
+  vote_count: number;
   release_date: string;
   overview?: string;
 }
@@ -58,5 +59,22 @@ export async function getMovieVideos(id: string) {
   const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}&language=en-US`;
 
   const res = await fetch(url, { cache: "no-store" });
+  return res.json();
+}
+
+// Get Recommendations
+export async function getRecommendedMovies(id: string) {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+  );
+
+  return res.json();
+}
+
+export async function getSimilarMovies(id: string) {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/movie/${id}/similar?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+  );
+
   return res.json();
 }
