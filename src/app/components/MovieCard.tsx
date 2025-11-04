@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import type { Movie } from "../lib/tmdb";
+import useFavorites from "../hooks/useFavorites";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import Link from "next/link";
 
 const getRatingColor = (score: number) => {
@@ -19,6 +21,9 @@ export default function MovieCard({ movie }: { movie: Movie }) {
   const rating = movie.vote_average ?? 0;
   const votes = movie.vote_count ?? 0;
 
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const fav = isFavorite(movie.id);
+
   return (
     <Link href={`/movie/${movie.id}`}>
       <motion.div
@@ -34,7 +39,18 @@ export default function MovieCard({ movie }: { movie: Movie }) {
           ⭐ {rating.toFixed(1)}
         </div>
 
-{movie.poster_path ? (
+        {/* ❤️ Favorite Button */}
+        <button
+          className="absolute top-2 right-2 z-10 text-red-500"
+          onClick={(e) => {
+            e.preventDefault();
+            fav ? removeFavorite(movie.id) : addFavorite(movie);
+          }}
+        >
+          {fav ? <FaHeart size={18} /> : <FaRegHeart size={18} />}
+        </button>
+
+        {movie.poster_path ? (
           <img
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             alt={movie.title}
@@ -49,7 +65,8 @@ export default function MovieCard({ movie }: { movie: Movie }) {
         <div className="p-2 text-white">
           <h3 className="text-sm font-semibold truncate">{movie.title}</h3>
           <p className="text-xs text-gray-300">
-            {movie.release_date?.slice(0, 4) || "Unknown"} • ⭐ {rating.toFixed(1)} ({votes} votes)
+            {movie.release_date?.slice(0, 4) || "Unknown"} • ⭐{" "}
+            {rating.toFixed(1)} ({votes} votes)
           </p>
         </div>
       </motion.div>
