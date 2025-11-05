@@ -9,6 +9,7 @@ import {
 import BackButton from "@/app/components/BackButton";
 import MovieCard from "@/app/components/MovieCard";
 import FavoriteButton from "@/app/components/FavoriteButton";
+import WatchlistButton from "@/app/components/WatchlistButton";
 
 export default async function MovieDetail(props: {
   params: Promise<{ id: string }>;
@@ -101,6 +102,9 @@ export default async function MovieDetail(props: {
 
               <div className="px-2 py-2">
                 <FavoriteButton movie={movie} />
+              </div>
+              <div className="px-2 py-2">
+                <WatchlistButton movie={movie} />
               </div>
             </div>
           </div>

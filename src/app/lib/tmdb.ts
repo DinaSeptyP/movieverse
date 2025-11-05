@@ -78,3 +78,15 @@ export async function getSimilarMovies(id: string) {
 
   return res.json();
 }
+
+// --- Universal tmdb fetcher for list sections (Trending, Popular, Top Rated) ---
+const BASE_URL = "https://api.themoviedb.org/3";
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+
+export async function tmdb(path: string) {
+  const url = `${BASE_URL}${path}${path.includes("?") ? "&" : "?"}api_key=${API_KEY}`;
+  const res = await fetch(url, { next: { revalidate: 3600 } });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+

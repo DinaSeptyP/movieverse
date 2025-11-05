@@ -6,7 +6,6 @@ import type { Movie } from "../lib/tmdb";
 import { searchMovies } from "../lib/tmdb";
 import MovieCard from "./MovieCard";
 
-
 export default function SearchBar() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -45,8 +44,13 @@ export default function SearchBar() {
   }, []);
 
   return (
-    <div className="max-w-5xl mx-auto mt-4 md:mt-6">
-      <form onSubmit={(e) => { e.preventDefault(); fetchMovies(query); }}>
+    <div className="max-w-7xl mx-auto mt-4 md:mt-6">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          fetchMovies(query);
+        }}
+      >
         <input
           placeholder="Search movies..."
           className="border p-2 w-full bg-black/30 text-white backdrop-blur-md rounded-md"
@@ -54,10 +58,10 @@ export default function SearchBar() {
           onChange={(e) => setQuery(e.target.value)}
         />
       </form>
-      
-{loading && <p className="text-gray-400 mt-3 text-sm">Searching...</p>}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mt-6">
+      {loading && <p className="text-gray-400 mt-3 text-sm">Searching...</p>}
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-6">
         {results.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
         ))}
