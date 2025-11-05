@@ -8,19 +8,30 @@ export default function FavoriteButton({ movie }: { movie: Movie }) {
   const { toggleFavorite, isFavorite } = useFavorites();
   const fav = isFavorite(movie.id);
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleFavorite(movie);
+  };
+
   return (
     <button
-      onClick={() => toggleFavorite(movie)}
-      className={`flex items-center gap-2 px-4 py-2 cursor-pointer rounded-md transition
-        ${fav ? "bg-red-600 hover:bg-red-700" : "bg-white/10 hover:bg-white/20"}
+      onClick={handleClick}
+      className={`flex items-center gap-2 px-4 py-2 rounded-md font-semibold transition
+        border backdrop-blur-md
+        ${
+          fav
+            ? "bg-red-600/80 border-red-500 text-white hover:bg-red-700"
+            : "bg-white/10 border-pink-500/40 hover:bg-pink-600/30 hover:border-pink-400"
+        }
+        shadow-[0_0_10px_rgba(255,0,200,0.4)]
       `}
     >
       {fav ? (
-        <FaHeart size={18} className="text-red-950" />
+        <FaHeart size={18} className="animate-pulse" />
       ) : (
         <FaRegHeart size={18} />
       )}
-      {fav ? "Added to Favorites" : "Add to Favorites"}
+      {fav ? "Favorited" : "Add to Favorites"}
     </button>
   );
 }
