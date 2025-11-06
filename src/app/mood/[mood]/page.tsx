@@ -7,7 +7,7 @@ interface MoodPageProps {
 }
 
 export default async function MoodPage({ params }: MoodPageProps) {
-  const { mood } = await params; // ✅ wajib di-await
+  const { mood } = await params;
 
   const moodKey = mood.toLowerCase();
   const genres = moodGenreMap[moodKey];
