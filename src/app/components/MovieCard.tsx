@@ -50,10 +50,14 @@ export default function MovieCard({ movie }: { movie: Movie }) {
             {fav ? <FaHeart size={18} /> : <FaRegHeart size={18} />}{" "}
           </button>
           {movie.poster_path ? (
-            <img
+            <Image
               src={poster}
               alt={movie.title}
+              width={500}
+              height={256}
               className="w-full h-64 object-cover"
+              priority={true}
+              unoptimized={poster === "/no-poster.png"}
             />
           ) : (
             <div className="w-full h-64 bg-gray-800 flex items-center justify-center text-gray-400 text-sm font-semibold">

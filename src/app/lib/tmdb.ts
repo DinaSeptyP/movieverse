@@ -90,3 +90,13 @@ export async function tmdb(path: string) {
   return res.json();
 }
 
+export async function getMoviesByGenre(genres: number[]) {
+  const genreString = genres.join(",");
+  const res = await fetch(
+    `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreString}&language=en-US&sort_by=popularity.desc`
+  );
+
+  if (!res.ok) throw new Error("Failed to fetch movies");
+  const data = await res.json();
+  return data.results;
+}
