@@ -70,7 +70,7 @@ export default function MovieCard({ movie }: { movie: Movie }) {
           <h3 className="text-sm font-semibold truncate">{movie.title}</h3>
           <p className="text-xs text-gray-300">
             {movie.release_date?.slice(0, 4) || "Unknown"} • ⭐{" "}
-            {rating.toFixed(1)}({votes} votes)
+            {rating.toFixed(1)} ({votes} votes)
           </p>
         </div>
       </motion.div>

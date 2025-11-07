@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import type { Movie } from "../lib/tmdb";
 import { searchMovies } from "../lib/tmdb";
@@ -16,20 +16,23 @@ export default function SearchBar() {
   const [results, setResults] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
 
-  async function fetchMovies(q: string) {
-    if (!q) {
-      setResults([]);
-      router.push("/");
-      return;
-    }
+  const fetchMovies = useCallback(
+    async (q: string) => {
+      if (!q) {
+        setResults([]);
+        router.push("/");
+        return;
+      }
 
-    router.push(`/?q=${q}`);
+      router.push(`/?q=${q}`);
 
-    setLoading(true);
-    const data = await searchMovies(q);
-    setResults(data.results);
-    setLoading(false);
-  }
+      setLoading(true);
+      const data = await searchMovies(q);
+      setResults(data.results);
+      setLoading(false);
+    },
+    [router]
+  );
 
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -37,11 +40,17 @@ export default function SearchBar() {
     }, 500);
 
     return () => clearTimeout(delay);
-  }, [query]);
+  }, [query, defaultQuery, fetchMovies]);
 
   useEffect(() => {
-    if (defaultQuery) fetchMovies(defaultQuery);
-  }, []);
+    if (!defaultQuery) return;
+
+    const timeout = setTimeout(() => {
+      fetchMovies(defaultQuery);
+    }, 0);
+
+    return () => clearTimeout(timeout);
+  }, [defaultQuery, fetchMovies]);
 
   return (
     <div className="max-w-7xl mx-auto mt-4 md:mt-6">
