@@ -1,24 +1,19 @@
 @import "tailwindcss";
 
+/* 🌑 Dark mode only */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #000000;
+  --foreground: #e5e5e5;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
-@layer base {
-  :root {
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --font-sans: var(--font-geist-sans);
-    --font-mono: var(--font-geist-mono);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* override all */
+html {
+  color-scheme: dark;
 }
 
 body {
@@ -27,35 +22,28 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* 🌫 Glass effect */
 .glass {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(12px);
 }
 
-/* Hide scrollbar but keep scroll working */
-
-/* Chrome, Safari, Edge */
+/* Scrollbar hidden but scrollable */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-
-/* Firefox */
 .no-scrollbar {
   scrollbar-width: none;
-}
-
-/* IE  */
-.no-scrollbar {
   -ms-overflow-style: none;
 }
 
-/* skeleton */
+/* Skeleton shimmer */
 .skeleton {
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0.04) 0%,
-    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.08) 50%,
     rgba(255, 255, 255, 0.04) 100%
   );
   background-size: 200% 100%;
