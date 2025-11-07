@@ -9,7 +9,6 @@ export default async function MovieSection({
   title: string;
   type?: "trending" | "popular" | "top_rated";
 }) {
-  // resolve TMDB path based on type
   let path = "";
   if (type === "trending") path = "/trending/movie/day";
   else if (type === "popular") path = "/movie/popular";
@@ -35,7 +34,10 @@ export default async function MovieSection({
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {/* skeleton placeholders (server-side simple) */}
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-64 bg-white/5 animate-pulse rounded-xl" />
+            <div
+              key={i}
+              className="h-64 rounded-xl bg-linear-to-r from-white/5 via-white/10 to-white/5 bg-size-[200%_100%] animate-shimmer"
+            />
           ))}
         </div>
       ) : (
